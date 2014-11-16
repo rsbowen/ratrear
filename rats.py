@@ -44,9 +44,10 @@ while cap.isOpened():
     right_rat_pixels = sum(sum(fgmask_binary[0:rearing_line, mid_line:]))
     f.write("%d,%d,%d\r\n"%(frame_index, left_rat_pixels, right_rat_pixels))
 
-  #break the loop if 'escape' is pressed
-  k = cv2.waitKey(30) & 0xff
-  if k==27:  break
+  if debug_video:
+    #break the loop if 'escape' is pressed
+    k = cv2.waitKey(30) & 0xff
+    if k==27:  break
   frame_index = frame_index+1
 
 f.close()
