@@ -1,24 +1,38 @@
-import cv2
+import cv2, sys, os.path
+import config_and_logging
+#todo: proper packages
+
+configured = config_and_logging.read_config()
 
 #some important frames
-first_rat_frame = 343 
-stable_camera_frame = 200
+first_rat_frame = int(configured["first_rat_frame"])
+stable_camera_frame = int(configured["stable_camera_frame"])
 
 #locations
-rearing_line = 600 #pixels from top of image
-mid_line = 700 #pixels from the left
+rearing_line = int(configured["rearing_line"])
+mid_line = int(configured["mid_line"])
+
+outfile = configured["outfile"]
 
 #debug video
-debug_video = False
+# TODO: move this into configuration file
+debug_video = True
 
-cap = cv2.VideoCapture('rats.MTS')
+logfile = configured["logfile"]
+logfile_handle = file(logfile, 'w')
+filename = configured["filename"]
+if not os.path.isfile(filename):
+  logfile_handle.write("Couldn't read filename %s\r\n"%(filename,))
+  sys.exit()
+  
+cap = cv2.VideoCapture(filename)
 foreground_mask = cv2.BackgroundSubtractorMOG()
 
 ret, frame = cap.read()
 fgmask = foreground_mask.apply(frame)
 
-f = file("output.csv", 'w');
-f.write("frame index,left_rat_pixels,right_rat_pixels\r\n")
+outfile_handle = file(outfile, 'w');
+outfile_handle.write("frame index,left_rat_pixels,right_rat_pixels\r\n")
 
 frame_index = 0
 while cap.isOpened():
@@ -42,7 +56,7 @@ while cap.isOpened():
     fgmask_binary = fgmask > 128;
     left_rat_pixels = sum(sum(fgmask_binary[0:rearing_line, 0:mid_line]))
     right_rat_pixels = sum(sum(fgmask_binary[0:rearing_line, mid_line:]))
-    f.write("%d,%d,%d\r\n"%(frame_index, left_rat_pixels, right_rat_pixels))
+    outfile_handle.write("%d,%d,%d\r\n"%(frame_index, left_rat_pixels, right_rat_pixels))
 
   if debug_video:
     #break the loop if 'escape' is pressed
@@ -50,6 +64,9 @@ while cap.isOpened():
     if k==27:  break
   frame_index = frame_index+1
 
-f.close()
+logfile_handle.write("Number of frames was: %d"%(frame_index,)) #todo: this might be off by one
+logfile_handle.close()
+
+outfile_handle.close()
 cap.release()
 cv2.destroyAllWindows()
