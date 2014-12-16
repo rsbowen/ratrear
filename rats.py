@@ -24,9 +24,11 @@ filename = configured["filename"]
 if not os.path.isfile(filename):
   logfile_handle.write("Couldn't read filename %s\r\n"%(filename,))
   sys.exit()
-  
+
 cap = cv2.VideoCapture(filename)
 foreground_mask = cv2.BackgroundSubtractorMOG()
+
+logfile_handle.write("Filesize of %s was %d bytes and isOpened was %d \r\n"%(filename, os.path.getsize(filename), cap.isOpened()))
 
 ret, frame = cap.read()
 fgmask = foreground_mask.apply(frame)
