@@ -1,4 +1,4 @@
-import cv2, sys, os.path
+import cv2, sys, os.path, hashlib
 import config_and_logging
 #todo: proper packages
 
@@ -24,6 +24,13 @@ filename = configured["filename"]
 if not os.path.isfile(filename):
   logfile_handle.write("Couldn't read filename %s\r\n"%(filename,))
   sys.exit()
+
+testread_handle = file(filename)
+m = hashlib.md5()
+s = testread_handle.read(128)
+m.update(s)
+logfile_handle.write("File read test: %s\r\n"%(m.hexdigest()))
+testread_handle.close()
 
 cap = cv2.VideoCapture(filename)
 foreground_mask = cv2.BackgroundSubtractorMOG()
