@@ -16,7 +16,7 @@ outfile = configured["outfile"]
 
 #debug video
 # TODO: move this into configuration file
-debug_video = True
+debug_video = False
 
 logfile = configured["logfile"]
 logfile_handle = file(logfile, 'w')
@@ -47,6 +47,7 @@ frame_index = 0
 while cap.isOpened():
   print frame_index;
   ret, frame = cap.read()
+  if not frame: break
   if(frame_index < stable_camera_frame):
     foreground_mask.apply(frame, fgmask, -1)
   else:
