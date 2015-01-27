@@ -47,7 +47,7 @@ frame_index = 0
 while cap.isOpened():
   print frame_index;
   ret, frame = cap.read()
-  if not frame: break
+  if frame==None: break
   if(frame_index < stable_camera_frame):
     foreground_mask.apply(frame, fgmask, -1)
   else:
