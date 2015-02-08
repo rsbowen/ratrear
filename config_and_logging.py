@@ -13,7 +13,7 @@ def read_section_with_defaults(config, section, defaults):
 def read_config():
   config = ConfigParser.ConfigParser()
   config.read("rats_config.ini")
-  defaults = {"filename":"rats.MTS", "outfile": "output.csv", "logfile":"rats_log.txt", "first_rat_frame": 343, "stable_camera_frame": 200, "rearing_line":600, "mid_line":700}
+  defaults = {"filename":"rats.MTS", "outfile": "output.csv", "logfile":"rats_log.txt", "first_rat_frame": 343, "stable_camera_frame": 200, "rearing_line":600, "mid_line":700, "show_debug": True}
   configured = read_section_with_defaults(config, "Video", defaults)
   print "Read these config values:"
   print configured

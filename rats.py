@@ -14,9 +14,7 @@ mid_line = int(configured["mid_line"])
 
 outfile = configured["outfile"]
 
-#debug video
-# TODO: move this into configuration file
-debug_video = False
+debug_video = int(configured["show_debug_video"]) is not 0
 
 logfile = configured["logfile"]
 logfile_handle = file(logfile, 'w')
@@ -45,7 +43,6 @@ outfile_handle.write("frame index,left_rat_pixels,right_rat_pixels\r\n")
 
 frame_index = 0
 while cap.isOpened():
-  print frame_index;
   ret, frame = cap.read()
   if frame==None: break
   if(frame_index < stable_camera_frame):
