@@ -39,7 +39,7 @@ ret, frame = cap.read()
 fgmask = foreground_mask.apply(frame)
 
 outfile_handle = file(outfile, 'w');
-outfile_handle.write("frame index,left_rat_pixels,right_rat_pixels\r\n")
+outfile_handle.write("frame index,left_rear_pixels,left_overall_pixels, right_rear_pixels, right_overall_pixels\r\n")
 
 frame_index = 0
 while cap.isOpened():
@@ -63,7 +63,9 @@ while cap.isOpened():
     fgmask_binary = fgmask > 128;
     left_rat_pixels = sum(sum(fgmask_binary[0:rearing_line, 0:mid_line]))
     right_rat_pixels = sum(sum(fgmask_binary[0:rearing_line, mid_line:]))
-    outfile_handle.write("%d,%d,%d\r\n"%(frame_index, left_rat_pixels, right_rat_pixels))
+    left_rat_detections = sum(sum(fgmask_binary[:, 0:mid_line]))
+    right_rat_detections = sum(sum(fgmask_binary[:, mid_line:]))
+    outfile_handle.write("%d,%d,%d\r\n"%(frame_index, left_rat_pixels, left_rat_detections, right_rat_pixels, right_rat_detections))
 
   if debug_video:
     #break the loop if 'escape' is pressed
