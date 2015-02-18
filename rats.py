@@ -65,7 +65,7 @@ while cap.isOpened():
     right_rat_pixels = sum(sum(fgmask_binary[0:rearing_line, mid_line:]))
     left_rat_detections = sum(sum(fgmask_binary[:, 0:mid_line]))
     right_rat_detections = sum(sum(fgmask_binary[:, mid_line:]))
-    outfile_handle.write("%d,%d,%d\r\n"%(frame_index, left_rat_pixels, left_rat_detections, right_rat_pixels, right_rat_detections))
+    outfile_handle.write("%d,%d,%d,%d,%d\r\n"%(frame_index, left_rat_pixels, left_rat_detections, right_rat_pixels, right_rat_detections))
 
   if debug_video:
     #break the loop if 'escape' is pressed
