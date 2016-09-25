@@ -35,19 +35,20 @@ foreground_mask = cv2.BackgroundSubtractorMOG()
 
 logfile_handle.write("Filesize of %s was %d bytes and isOpened was %d \r\n"%(filename, os.path.getsize(filename), cap.isOpened()))
 
-ret, frame = cap.read()
-fgmask = foreground_mask.apply(frame)
+#ret, frame = cap.read()
+#fgmask = foreground_mask.apply(frame)
 
 outfile_handle = file(outfile, 'w');
 outfile_handle.write("frame index,left_rear_pixels,left_overall_pixels, right_rear_pixels, right_overall_pixels\r\n")
 
 frame_index = 0
+fgmask = None
 while cap.isOpened():
   ret, frame = cap.read()
   if frame==None: break
-  if(frame_index < stable_camera_frame):
-    foreground_mask.apply(frame, fgmask, -1)
-  else:
+  if(frame_index == stable_camera_frame):
+    fgmask = foreground_mask.apply(frame)
+  if(frame_index > stable_camera_frame):
     foreground_mask.apply(frame, fgmask, 0)
 
   if debug_video:
